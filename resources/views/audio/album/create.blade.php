@@ -8,7 +8,6 @@
                   enctype="multipart/form-data">
                 {{ csrf_field() }}
 
-                {{ dump($errors) }}
                 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                     <label for="name" class="col-md-4 control-label">Title album:</label>
 

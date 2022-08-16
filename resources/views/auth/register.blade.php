@@ -3,7 +3,7 @@
 @section('content')
     <div class="overlay">
         <!-- LOGN IN FORM by Omar Dsoky -->
-        <form method="POST" action="{{ url('/register') }}" class="auth-form">
+        <form method="POST" action="{{ url ('/register') }}" class="auth-form">
         {{ csrf_field() }}
         <!--   con = Container  for items in the form-->
             <div class="con">

@@ -26,6 +26,6 @@ class Album extends Model
 
     public function getDateRelease()
     {
-        return Carbon::parse($this->date_release)->diffForHumans();
+        return Carbon::parse($this->date_release)->year;
     }
 }

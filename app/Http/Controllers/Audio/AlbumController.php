@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers\Audio;
 
-use App\Model\Album;
-use App\Model\Track;
-use App\User;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Illuminate\Pagination\Paginator;
+use App\Http\Requests;
+use App\Model\Album;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -28,11 +24,8 @@ class AlbumController extends Controller
      */
     public function index()
     {
-        $albums = \Auth::user()->albums()->orderBy('updated_at','desc')->get();
-        return view('user.album', ['albums'=>$albums]);
-//        $user = Auth::user();
-//        $albums = Auth::user()->albums;
-//        return view('audio.album.index', ['user' => $user], compact('albums'));
+        $albums = Auth::user()->albums()->orderBy('updated_at', 'desc')->get();
+        return view('user.album', ['albums' => $albums]);
     }
 
     /**
@@ -62,8 +55,8 @@ class AlbumController extends Controller
 
 //        dd($validator->errors());
         if ($validator->errors()) {
-            return redirect()->route('album.create',[
-                'errors'=>$validator->errors(),
+            return redirect()->route('album.create', [
+                'errors' => $validator->errors(),
             ]);
 //                ->withErrors($validator->errors())
 //                ->withInput();
@@ -75,21 +68,21 @@ class AlbumController extends Controller
 
         $name = $request->file('img_path')->getClientOriginalName();
         $path = $request->file('img_path')
-                ->move("images\cover\\".date('Y-m-d'), $name);
+            ->move("images\cover\\" . date('Y-m-d'), $name);
 
         $album = $request->user()->albums()->create([
-            'name'=> (trim(strtolower($request['name']))),
-            'img_path'=>$path->getPathname(),
-            'date_release'=>$request['date'],
+            'name' => (trim(strtolower($request['name']))),
+            'img_path' => $path->getPathname(),
+            'date_release' => $request['date'],
         ]);
 
-        return redirect()->route('album.show', $album );
+        return redirect()->route('album.show', $album);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show(Album $album)
@@ -124,31 +117,24 @@ class AlbumController extends Controller
             "img_path" => 'image|max:20000',
         ]);
 
-        if($request->hasFile('img_path')){
+        if ($request->hasFile('img_path')) {
             $name = $request->file('img_path')->getClientOriginalName();
             $path = $request->file('img_path')
-                ->move("images\cover\\".date('Y-m-d'), $name);
+                ->move("images\cover\\" . date('Y-m-d'), $name);
             $album->img_path = $path->getPathname();
         };
 
-
         $album->name = $request->name;
         $album->date_release = $request->date_release;
-//        dd($request->all(), $album);
         $album->save();
         return redirect()->route('album.show', $album);
 
-//        dd($request->file(), $album);
-//        $user = Auth::user();
-//        $data = $request->all();
-//        $album->update($data);
-//        return redirect()->route('album.index', ['user' => $user], $album);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Album $album)
